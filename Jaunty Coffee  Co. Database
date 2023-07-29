@@ -1,1 +1,68 @@
+-- code to create tables
+CREATE TABLE Coffee_Shop (
+  shop_id INT NOT NULL,
+  shop_name VARCHAR(50),
+  city VARCHAR(50),
+  state CHAR(2),
+  PRIMARY KEY(shop_id)
+);
+CREATE TABLE Supplier (
+  supplier_id INT NOT NULL,
+  company_name VARCHAR(50),
+  country VARCHAR(30),
+  sales_contact_name VARCHAR(60),
+  email VARCHAR(50) NOT NULL,
+  PRIMARY KEY(supplier_id)
+);
+CREATE TABLE Employee (
+  employee_id INT NOT NULL,
+  first_name VARCHAR(30),
+  last_name VARCHAR(30),
+  hire_date DATE,
+  job_title VARCHAR(30),
+  shop_id INT,
+  PRIMARY KEY(employee_id),
+  FOREIGN KEY(shop_id) REFERENCES Coffee_Shop(shop_id)
+);
+CREATE TABLE Coffee (
+  coffee_id INT NOT NULL,
+  shop_id INT,
+  supplier_id INT,
+  coffee_name VARCHAR(30),
+  price_per_pound NUMERIC(5,2),
+  PRIMARY KEY(coffee_id),
+  FOREIGN KEY(shop_id) REFERENCES Coffee_Shop(shop_id),
+  FOREIGN KEY(supplier_id) REFERENCES Supplier(supplier_id)
+);
+-- code to populate the tables
+INSERT INTO Coffee_Shop(shop_id,shop_name,city,state)
+VALUES
+  (101,'Rise and Shine','Seattle','WA'),
+  (102,'CoCo Beans','Plano','TX'),
+  (103,'Cafe All Day','Harlem','NY');
+INSERT INTO Supplier(supplier_id,company_name,country,sales_contact_name,email)
+VALUES
+  (60,'Bean Head','USA','Lance','lancestrong@gmail.com'),
+  (62,'Granos de Cafe Caro','Spain','Oscar','oscar247@gmail.com'),
+  (64,'Beviamo','Italy','Caterina','contact.caterina@yahoo.com');
+INSERT INTO Employee(employee_id,first_name,last_name,hire_date,job_title,shop_id)
+VALUES
+  (1012347,'Celeste','Catala','2016-06-14','sales associate',101),
+  (7770123,'Jesus','Domingo','2005-12-31','inventory data operator',102),
+  (8342145,'Suzanne','Heart','1997-10-18','regional manager',103);
+INSERT INTO Coffee(coffee_id,shop_id,supplier_id,coffee_name,price_per_pound)
+VALUES
+  (1,101,60,'Nitro Cold Brew Coffee',2.56),
+  (3,102,62,'Cortado',7.77),
+  (7,103,64,'Cafe Corretto',3.42);
+-- creating a view on the Employee table
+CREATE VIEW Employee_View
+AS SELECT employee_id,concat(first_name," ",last_name)
+AS employee_full_name, hire_date,job_title,shop_id
+FROM Employee;
+-- creating an index for the coffee_name from the Coffee table
+CREATE INDEX coffee_index
+ON Coffee(coffee_name);
 
+
+  
